@@ -15,6 +15,8 @@ that project's own repo; this repo carries the cross-project brain that otherwis
 | `output-styles/baby-fable-5.md` | The Baby Fable 5 output style. |
 | `settings.sample.json` | Reference for the two prefs that select the output style. The real `settings.json` is git-ignored (machine-local, may gain secrets). |
 | `install.ps1` | Symlinks the above into `~/.claude/` (copy fallback) and selects the output style. |
+| `bootstrap-repo.ps1` | One-shot: give a *new* project repo its design content (AGENTS.md pointer + DESIGN.md template). The loop needs nothing per-repo. |
+| `templates/DESIGN.md` | Fill-in brand-contract template used by `bootstrap-repo.ps1`. |
 
 ## New machine setup
 
@@ -30,6 +32,33 @@ style. Full restore = **this repo (global brain) + your project repos (local con
 `install.ps1` symlinks by default so this repo stays the single source of truth — edits made via
 `~/.claude/...` write straight back here; commit and push to sync to your other machines. (On a
 host without symlink privilege it copies instead, and you'd re-run it after pulling updates.)
+
+## Adding to a new project repo
+
+The **mechanism is already global** — once `install.ps1` has run on a machine, `retro` and
+`design-direction` work in every repo there. A new repo only ever needs *content*, and only if it
+has a design surface:
+
+- **The loop / retro:** nothing to do. AGENTS.md is its sink (created on demand); the global
+  CLAUDE.md rule drives capture. Backend/no-UI repos need nothing at all.
+- **Design:** the repo needs a `DESIGN.md` (its brand) + a one-line AGENTS.md pointer.
+
+Best path — let the skill author an accurate contract from the repo's real tokens:
+
+> Open the repo in Claude Code and say *"set up the design contract for this repo"*.
+> `design-direction` reads `globals.css` / the theme and drafts a tokenized `DESIGN.md`.
+
+Offline / scriptable path — stamp the pointer + a template to fill in later:
+
+```powershell
+# from the claude-config repo:
+powershell -ExecutionPolicy Bypass -File .\bootstrap-repo.ps1 -RepoPath D:\my-new-app
+# backend repo with no UI — skip the DESIGN.md (or just don't run this at all):
+powershell -File .\bootstrap-repo.ps1 -RepoPath D:\api-only -NoDesignFile
+```
+
+Both are idempotent. Then commit `DESIGN.md` + `AGENTS.md` in *that* repo — it travels with the
+project's own GitHub history, not this one.
 
 ## Security
 

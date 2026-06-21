@@ -7,7 +7,7 @@
   the user's ~/.claude directory (falling back to a copy if symlink privilege is unavailable), and
   ensures settings.json selects the output style without clobbering other keys.
 
-  Secrets (.credentials.json, tokens) are NEVER touched and NEVER live in this repo — on a new
+  Secrets (.credentials.json, tokens) are NEVER touched and NEVER live in this repo -- on a new
   machine you re-authenticate locally with `claude` as usual.
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File .\install.ps1
@@ -71,11 +71,11 @@ if (Test-Path $settingsPath) {
   $settings = [pscustomobject]@{}
 }
 $settings | Add-Member -NotePropertyName 'outputStyle' -NotePropertyValue 'baby-fable-5' -Force
-# Write UTF-8 WITHOUT BOM — Node's JSON.parse (used by Claude Code) throws on a leading BOM.
+# Write UTF-8 WITHOUT BOM -- Node's JSON.parse (used by Claude Code) throws on a leading BOM.
 $json = $settings | ConvertTo-Json -Depth 20
 [System.IO.File]::WriteAllText($settingsPath, $json, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "  set outputStyle=baby-fable-5 in settings.json"
 
 Write-Host ""
 Write-Host "Done. Start a new Claude Code session to pick up the global skills + output style."
-Write-Host "(.bak files are your old real copies — delete them once you've confirmed things work.)"
+Write-Host "(.bak files are your old real copies -- delete them once you've confirmed things work.)"
