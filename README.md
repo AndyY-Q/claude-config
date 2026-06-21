@@ -5,6 +5,21 @@ machine. Per-project *content* (each repo's `DESIGN.md`, `AGENTS.md`, ADRs) alre
 that project's own repo; this repo carries the cross-project brain that otherwise lives only in
 `~/.claude/` and would be lost on a new device.
 
+**The rule that ties it together: install the mechanism once per machine; repos only ever get
+content.** The skills (`retro`, `design-direction`) and the global `CLAUDE.md` rule are global —
+run `install.ps1` once and they work in every repo on that machine. Individual repos never install
+the mechanism; they only carry a `DESIGN.md`/`AGENTS.md` if they have a design surface.
+
+## Quick reference
+
+| You're doing… | Do this |
+|---|---|
+| Set up a new machine | clone this repo → `install.ps1`, then clone your project repos |
+| New repo **with a UI** | in Claude Code: *"set up the design contract for this repo"* (or run `bootstrap-repo.ps1`) |
+| New **backend** repo (no UI) | nothing — the loop is already global |
+| Want a deliberate end-of-session sweep | invoke the `retro` skill |
+| Captured a cross-project lesson | `git commit && push` from this repo to sync it to other machines |
+
 ## What's in here
 
 | Path | What it is |
