@@ -71,7 +71,9 @@ if (Test-Path $settingsPath) {
   $settings = [pscustomobject]@{}
 }
 $settings | Add-Member -NotePropertyName 'outputStyle' -NotePropertyValue 'baby-fable-5' -Force
-$settings | ConvertTo-Json -Depth 20 | Set-Content $settingsPath -Encoding utf8
+# Write UTF-8 WITHOUT BOM — Node's JSON.parse (used by Claude Code) throws on a leading BOM.
+$json = $settings | ConvertTo-Json -Depth 20
+[System.IO.File]::WriteAllText($settingsPath, $json, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host "  set outputStyle=baby-fable-5 in settings.json"
 
 Write-Host ""
