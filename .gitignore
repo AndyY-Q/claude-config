@@ -1,0 +1,12 @@
+# This repo holds PORTABLE config only. Never commit machine-local secrets.
+.credentials.json
+settings.json
+mcp-needs-auth-cache.json
+*.token
+*.key
+*.pem
+.env
+.env.*
+
+# install.ps1 leaves these when it backs up pre-existing real files
+*.bak
